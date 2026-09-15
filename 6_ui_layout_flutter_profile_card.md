@@ -355,11 +355,33 @@ Kalau kamu ingin proporsi tidak sama rata, gunakan `flex`:
 ```dart
 Row(
   children: [
-    Expanded(flex: 2, child: Container(color: Colors.blue)), // 2 bagian
-    Expanded(flex: 1, child: Container(color: Colors.red)),  // 1 bagian
+    Expanded(
+      flex: 2,
+      child: Container(
+        height: 60,
+        color: Colors.blue,
+        alignment: Alignment.center,
+        child: const Text('flex: 2', style: TextStyle(color: Colors.white)),
+      ),
+    ),
+    Expanded(
+      flex: 1,
+      child: Container(
+        height: 60,
+        color: Colors.red,
+        alignment: Alignment.center,
+        child: const Text('flex: 1', style: TextStyle(color: Colors.white)),
+      ),
+    ),
   ],
 )
 ```
+
+> ⚠️ **Catatan penting**: `Container` tanpa `child` dan tanpa `height` akan otomatis punya tinggi **0**, jadi warnanya tidak akan terlihat sama sekali meskipun lebarnya sudah terbagi dengan benar. Selalu beri `height` (atau isi dengan `child`) supaya efek `flex` bisa benar-benar kamu lihat, seperti contoh di atas.
+
+Kalau kode di atas kamu jalankan, hasilnya kurang lebih seperti ini — kotak biru mengambil 2 bagian ruang, kotak merah mengambil 1 bagian:
+
+![Ilustrasi proporsi flex 2 banding 1](flex-demo.png)
 
 ### 🏭 Insight Industri: Spacer
 
