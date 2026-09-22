@@ -26,7 +26,14 @@ console.log(`Ditemukan ${files.length} file slide:`);
 for (const file of files) {
   const input = join(slidesDir, file);
 
-  const slug = basename(file, extname(file))
+  let slug = basename(file, extname(file));
+
+  // Hapus suffix .slides dari nama file
+  if (slug.endsWith(".slides")) {
+    slug = slug.slice(0, -".slides".length);
+  }
+
+  slug = slug
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
