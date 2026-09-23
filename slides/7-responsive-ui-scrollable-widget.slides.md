@@ -22,6 +22,8 @@ Durasi: 2 × 4 jam · Lanjutan dari Modul 4 (UI & Layout)
 📄 Modul lengkap: [github.com/iffakhry/mobile-app-jti](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md)
 
 ---
+class: text-xs leading-snug
+---
 
 # 🎯 Tujuan Pembelajaran
 
@@ -35,6 +37,8 @@ Setelah menyelesaikan modul ini, kamu mampu:
 6. Menggabungkan konten scroll dengan **`CustomScrollView` + Sliver**
 7. Menghasilkan aplikasi yang tampil baik di **HP, landscape, dan tablet**
 
+---
+class: text-sm leading-snug
 ---
 
 # 📦 Yang Akan Kamu Bangun
@@ -56,13 +60,13 @@ Satu kolom, semua bagian ditumpuk & di-scroll bersama
 <div>
 
 **Tablet / layar lebar (≥ 840 dp)**
-Dua panel — profil di kiri, konten di kanan, masing-masing scroll sendiri
+Dua panel, masing-masing scroll sendiri
 
 </div>
 </div>
 
-> Satu project, dibangun **bertahap** dari awal sampai jadi.
-
+---
+class: text-xs leading-snug
 ---
 
 # 🧭 Timeline — Pertemuan 1 (4 jam)
@@ -79,6 +83,8 @@ Dua panel — profil di kiri, konten di kanan, masing-masing scroll sendiri
 | Rangkuman, Checkpoint 1, Challenge | 40 mnt |
 
 ---
+class: text-xs leading-snug
+---
 
 # 🧭 Timeline — Pertemuan 2 (4 jam)
 
@@ -94,13 +100,15 @@ Dua panel — profil di kiri, konten di kanan, masing-masing scroll sendiri
 | Challenge | 35 mnt |
 
 ---
+class: text-xs leading-snug
+---
 
 # 🧰 Prasyarat & 🏷️ Cara Membaca Modul
 
 **Prasyarat**
 - Flutter SDK **3.27+** (`flutter --version`)
 - Sudah paham `Row`, `Column`, `Stack`, `Expanded`, `Padding`, `SizedBox`, `Card` (Modul 4)
-- Emulator Android + Chrome siap
+- Emulator Android + Chrome siap dipakai
 
 **Ikon**
 
@@ -119,6 +127,8 @@ layout: section
 # 📅 Pertemuan 1
 
 ---
+class: text-sm leading-snug
+---
 
 # Bagian 0 — Persiapan (15 menit)
 
@@ -129,7 +139,13 @@ flutter create profil_digital
 cd profil_digital
 ```
 
-Struktur folder:
+💡 **Kenapa dipecah ke banyak file?** Satu widget = satu file → lebih mudah dibaca, dites, dikerjakan tim.
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 0 — Struktur Folder
 
 ```
 lib/
@@ -143,10 +159,10 @@ lib/
     └── skill_chips.dart
 ```
 
-💡 **Kenapa dipecah ke banyak file?** Satu widget = satu file → lebih mudah dibaca, dites, dikerjakan tim.
+📎 [Lihat kode lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-0--persiapan-15-menit)
 
-📎 [Lihat kode lengkap (main.dart, profile_header.dart, dll.) →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-0--persiapan-15-menit)
-
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 1 — Kenapa UI Harus Responsif? (20 menit)
@@ -159,7 +175,11 @@ lib/
 
 > **Constraints go down. Sizes go up. Parent sets position.**
 
-### Peta alat di modul ini
+---
+class: text-sm leading-snug
+---
+
+# Bagian 1 — Peta Alat di Modul Ini
 
 | Kebutuhan | Alat |
 |---|---|
@@ -171,12 +191,14 @@ lib/
 📎 [Detail eksperimen & peta alat →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-1--kenapa-ui-harus-responsif-20-menit)
 
 ---
+class: text-sm leading-snug
+---
 
 # Bagian 2 — SafeArea (30 menit)
 
 Menambahkan padding otomatis agar konten tidak tertutup **notch, status bar, gesture bar**.
 
-```dart {all|2|3-4}
+```dart
 return Scaffold(
   body: SafeArea(
     child: Padding(/* ...konten... */),
@@ -184,7 +206,13 @@ return Scaffold(
 );
 ```
 
-### Kapan `SafeArea` dibutuhkan?
+⚠️ Untuk halaman **scroll**, letakkan `SafeArea` **di dalam** scroll view, bukan membungkusnya.
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 2 — Kapan `SafeArea` Dibutuhkan?
 
 | Situasi | Perlu? |
 |---|---|
@@ -193,10 +221,10 @@ return Scaffold(
 | Tombol/bar custom di bawah layar | ✅ Ya |
 | Landscape di perangkat ber-notch | ✅ Ya (kiri/kanan) |
 
-⚠️ Untuk halaman **scroll**, letakkan `SafeArea` **di dalam** scroll view, bukan membungkusnya.
-
 📎 [Kode lengkap + opsi `top`/`bottom`/`minimum` →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-2--safearea-30-menit)
 
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 3 — MediaQuery (40 menit)
@@ -209,7 +237,12 @@ Info tentang **layar dan pengaturan perangkat**.
 | `MediaQuery.orientationOf(context)` | portrait / landscape |
 | `MediaQuery.paddingOf(context)` | Area aman sistem |
 | `MediaQuery.viewInsetsOf(context)` | Area tertutup keyboard |
-| `MediaQuery.textScalerOf(context)` | Skala font pengguna |
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 3 — Catatan Penting
 
 💡 Pakai `MediaQuery.sizeOf(context)`, **bukan** `.of(context).size` — `sizeOf` hanya rebuild saat ukuran berubah.
 
@@ -217,6 +250,8 @@ Info tentang **layar dan pengaturan perangkat**.
 
 📎 [Kode `ScreenInfo` panel debug + avatar responsif →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-3--mediaquery-40-menit)
 
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 4 — LayoutBuilder (40 menit)
@@ -227,7 +262,13 @@ Info tentang **layar dan pengaturan perangkat**.
 | | `MediaQuery` | `LayoutBuilder` |
 |---|---|---|
 | Sumber data | Layar/perangkat | Constraints dari induk |
-| Cocok untuk | Keputusan level halaman | Keputusan level komponen |
+| Cocok untuk | Level halaman | Level komponen |
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 4 — Header Adaptif
 
 ```dart {all|3|5-6}
 return LayoutBuilder(
@@ -240,39 +281,47 @@ return LayoutBuilder(
 );
 ```
 
-💡 Breakpoint dipusatkan dalam satu class `Breakpoints` (medium: 600, expanded: 840 — Material 3 window size classes).
+💡 Breakpoint dipusatkan dalam satu class `Breakpoints` (medium: 600, expanded: 840).
 
 📎 [Kode lengkap `breakpoints.dart` + header adaptif →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-4--layoutbuilder-40-menit)
 
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 5 — SingleChildScrollView (40 menit)
 
 Membuat **satu anak** bisa di-scroll. Cocok untuk konten **pendek dan statis**.
 
-```dart {all|3|4-5}
+```dart
 body: SingleChildScrollView(
   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
   child: SafeArea(
-    child: Padding(/* ...Column berisi semua section... */),
+    child: Padding(/* ...semua section... */),
   ),
 ),
 ```
 
-### Kapan memakai?
+⚠️ `Expanded`/`Flexible` **tidak boleh** langsung di dalam `Column` di dalam `SingleChildScrollView`.
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 5 — Kapan Memakainya?
 
 | ✅ Cocok | ❌ Tidak cocok |
 |---|---|
 | Form, halaman detail, konten pendek | Daftar panjang (puluhan–ribuan item) |
 | Jumlah anak sedikit & tetap | Data dari API/database |
 
-⚠️ `Expanded`/`Flexible` **tidak boleh** langsung di dalam `Column` yang ada di `SingleChildScrollView` → error *unbounded height*.
-
 📎 [Kode lengkap `ContactSection` + solusi scroll →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-5--singlechildscrollview-40-menit)
 
 ---
+class: text-sm leading-snug
+---
 
-# ✅ Rangkuman & Checkpoint Pertemuan 1
+# ✅ Rangkuman Pertemuan 1
 
 | Widget | Satu kalimat |
 |---|---|
@@ -281,13 +330,22 @@ body: SingleChildScrollView(
 | `LayoutBuilder` | Info ruang dari induk — dasar komponen adaptif |
 | `SingleChildScrollView` | Scroll untuk konten pendek & statis |
 
-**Checkpoint 1** — sebelum lanjut, pastikan:
+---
+class: text-sm leading-snug
+---
+
+# ✅ Checkpoint 1
+
+Sebelum lanjut, pastikan:
+
 - Tidak ada overflow saat landscape
 - Header berubah bentuk saat jendela dilebarkan
 - Mengetuk `TextField` tidak menyebabkan overflow
 
 📎 [Checklist lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-checkpoint-1)
 
+---
+class: text-sm leading-snug
 ---
 
 # 🏆 Challenge Pertemuan 1
@@ -296,7 +354,7 @@ body: SingleChildScrollView(
 
 **⭐⭐ Sedang** — extension `ScreenX` (`isCompact`, dst.); `StatsRow` pakai `Wrap` agar tahan `textScale` 2.0
 
-**⭐⭐⭐ Sulit** — uji font size terbesar & perbaiki semua overflow; batasi lebar konten dengan `ConstrainedBox(maxWidth: 640)`
+**⭐⭐⭐ Sulit** — uji font size terbesar & perbaiki overflow; batasi lebar konten dengan `ConstrainedBox(maxWidth: 640)`
 
 📎 [Detail challenge →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-challenge-pertemuan-1)
 
@@ -307,19 +365,24 @@ layout: section
 # 📅 Pertemuan 2
 
 ---
+class: text-sm leading-snug
+---
 
-# Bagian 6 — ListView (50 menit)
-
-### Peta widget scrollable
+# Bagian 6 — Peta Widget Scrollable
 
 | Widget | Untuk apa | Lazy? |
 |---|---|---|
 | `SingleChildScrollView` | Konten pendek & statis | ❌ |
 | `ListView(children: [...])` | Daftar pendek | ❌ |
 | `ListView.builder` | Daftar panjang/dinamis | ✅ |
-| `ListView.separated` | builder + pemisah | ✅ |
 | `GridView.builder` | Grid panjang | ✅ |
 | `CustomScrollView` + Sliver | Gabungan konten scroll | ✅ |
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 6 — ListView (50 menit)
 
 🧪 **Eksperimen:** `ListView.builder` hanya cetak belasan `build item` di awal; `ListView` biasa langsung cetak **1000 baris sekaligus**.
 
@@ -327,6 +390,8 @@ layout: section
 
 📎 [Kode data dummy + `ProjectTile` + 3 constructor ListView →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-6--listview-50-menit)
 
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 7 — `ListView` di dalam `Column` (20 menit)
@@ -339,18 +404,22 @@ Vertical viewport was given unbounded height.
 
 **Kenapa?** `ListView` ingin setinggi mungkin, tapi induknya memberi tinggi **tak terbatas**.
 
-### Tiga solusi
+---
+class: text-sm leading-snug
+---
+
+# Bagian 7 — Tiga Solusi
 
 | Solusi | Cara | Catatan |
 |---|---|---|
-| **A.** `Expanded` | Bungkus `ListView` | Hanya jika `Column` **tidak** di dalam scroll view |
-| **B.** `shrinkWrap` | `shrinkWrap: true` + `NeverScrollableScrollPhysics` | Cepat tapi **kehilangan sifat lazy** |
+| **A.** `Expanded` | Bungkus `ListView` | Hanya jika `Column` **tidak** di scroll view |
+| **B.** `shrinkWrap` | + `NeverScrollableScrollPhysics` | Cepat tapi **kehilangan sifat lazy** |
 | **C.** **Sliver** | `CustomScrollView` | ✅ Solusi standar industri (Bagian 9) |
-
-⚠️ `shrinkWrap` menghitung tinggi **semua** item sekaligus — cukup untuk 8 item, buruk untuk 800.
 
 📎 [Kode solusi B lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-7--masalah-klasik-listview-di-dalam-column-20-menit)
 
+---
+class: text-sm leading-snug
 ---
 
 # Bagian 8 — GridView (50 menit)
@@ -362,30 +431,40 @@ Vertical viewport was given unbounded height.
 | | `FixedCrossAxisCount` | `MaxCrossAxisExtent` |
 |---|---|---|
 | Jumlah kolom | Selalu sama | Bertambah saat layar melebar |
-| Ukuran item | Berubah mengikuti layar | Relatif stabil |
 | Kapan dipakai | Layout harus konsisten | **Responsif otomatis** ✅ |
 
-💡 Untuk grid responsif, `MaxCrossAxisExtent` sering jadi pilihan pertama — **tidak perlu `if` breakpoint**.
+---
+class: text-sm leading-snug
+---
 
-⚠️ Masalah umum gambar tidak tampil: izin `INTERNET` (Android release) & CORS (Chrome) → pakai `picsum.photos/seed/...`. Container tanpa `child`/`height` = tinggi 0.
+# Bagian 8 — Catatan Penting
+
+⚠️ Gambar tak tampil? Izin `INTERNET` (Android release) & CORS (Chrome) → pakai `picsum.photos/seed/...`. Container tanpa `child`/`height` = tinggi 0.
 
 💡 Untuk cache gambar jaringan di aplikasi nyata: package `cached_network_image`.
 
 📎 [Kode `GalleryTile`, delegate, & penanganan error gambar →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-8--gridview-50-menit)
 
 ---
+class: text-sm leading-snug
+---
 
 # Bagian 9 — CustomScrollView & Sliver (35 menit)
 
-**Sliver** = "potongan" dari satu area scroll. `CustomScrollView` menggabungkan banyak sliver jadi **satu scroll tunggal yang tetap lazy**.
+**Sliver** = "potongan" dari satu area scroll — digabung jadi **satu scroll tunggal yang tetap lazy**.
 
 | Sliver | Padanannya |
 |---|---|
 | `SliverToBoxAdapter` | Widget biasa (header, judul) |
 | `SliverList` | `ListView` |
 | `SliverGrid` | `GridView` |
-| `SliverPadding` | `Padding` |
 | `SliverAppBar` | `AppBar` yang bisa mengecil saat scroll |
+
+---
+class: text-sm leading-snug
+---
+
+# Bagian 9 — Contoh Kode
 
 ```dart {all|4-6|8}
 CustomScrollView(
@@ -401,15 +480,17 @@ CustomScrollView(
 )
 ```
 
-⚠️ `CustomScrollView` hanya menerima **sliver**; widget biasa harus dibungkus `SliverToBoxAdapter`.
+⚠️ `CustomScrollView` hanya menerima **sliver**; widget biasa dibungkus `SliverToBoxAdapter`.
 
 📎 [Kode lengkap `ProfilePage` versi Sliver →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-9--customscrollview--sliver-35-menit)
 
 ---
+class: text-sm leading-snug
+---
 
-# Bagian 10 — Layout Dua Panel untuk Layar Lebar (25 menit)
+# Bagian 10 — Layout Dua Panel (25 menit)
 
-Di tablet/landscape lebar, satu kolom terlalu renggang → **dua panel**: profil di kiri, konten di kanan, masing-masing scroll sendiri.
+Di tablet/landscape lebar, satu kolom terlalu renggang → **dua panel**, masing-masing scroll sendiri.
 
 ```dart {all|3-4}
 child: LayoutBuilder(
@@ -422,28 +503,45 @@ child: LayoutBuilder(
 ),
 ```
 
-🧪 **Eksperimen:** lebarkan jendela Chrome melewati **840 dp** → layout berpindah ke dua panel; header di panel kiri tetap atas-bawah (ruangnya sempit) — bukti `LayoutBuilder` bekerja di level komponen.
+---
+class: text-sm leading-snug
+---
+
+# Bagian 10 — Catatan Penting
+
+🧪 **Eksperimen:** lebarkan jendela Chrome melewati **840 dp** → layout berpindah ke dua panel; jumlah kolom galeri bertambah otomatis.
 
 💡 **Checklist pengujian responsif:** HP kecil & besar, landscape, tablet, font terbesar, keyboard terbuka, data panjang.
 
 📎 [Kode lengkap `_TwoPaneLayout` →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#bagian-10--layout-dua-panel-untuk-layar-lebar-25-menit)
 
 ---
+class: text-sm leading-snug
+---
 
-# ✅ Rangkuman & Checkpoint Pertemuan 2
+# ✅ Rangkuman Pertemuan 2
 
 | Konsep | Ringkasnya |
 |---|---|
-| `ListView.builder` | Daftar panjang yang lazy — standar untuk data dinamis |
-| `ListView` di `Column` | Error *unbounded height* → `Expanded` atau (lebih baik) Sliver |
+| `ListView.builder` | Daftar panjang yang lazy |
+| `ListView` di `Column` | Error *unbounded* → `Expanded` atau Sliver |
 | `GridView` + `MaxCrossAxisExtent` | Grid responsif otomatis |
-| `CustomScrollView` + Sliver | Gabungan header, list, grid dalam satu scroll lazy |
-| `LayoutBuilder` di level halaman | Memilih layout satu kolom vs dua panel |
+| `CustomScrollView` + Sliver | Header + list + grid, satu scroll lazy |
 
-**Checkpoint 2** — profil, statistik, skill, Proyek (8), Galeri (24), Kontak; lebar ≥ 840 dp → dua panel; tidak ada overflow.
+---
+class: text-sm leading-snug
+---
+
+# ✅ Checkpoint 2 — Hasil Akhir
+
+- Profil, statistik, skill, Proyek (8), Galeri (24), Kontak tampil
+- Lebar ≥ 840 dp → muncul dua panel
+- Tidak ada overflow di portrait, landscape, atau font besar
 
 📎 [Checklist lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-checkpoint-2--hasil-akhir)
 
+---
+class: text-sm leading-snug
 ---
 
 # 🏆 Challenge Pertemuan 2
@@ -452,63 +550,79 @@ child: LayoutBuilder(
 
 **⭐⭐ Sedang** — `CachedNetworkImage`; `RefreshIndicator`; toggle tampilan List ↔ Grid
 
-**⭐⭐⭐ Sulit** — FAB "ke atas" muncul setelah scroll 300 dp; `SliverAppBar` dengan `FlexibleSpaceBar`; breakpoint medium (600–839 dp)
+**⭐⭐⭐ Sulit** — FAB "ke atas" setelah scroll 300 dp; `SliverAppBar` + `FlexibleSpaceBar`; breakpoint medium (600–839 dp)
 
-**🌟 Bonus** — ganti studi kasus (portofolio fotografer / profil toko / katalog produk) memakai **semua** widget di modul ini
-
-📎 [Detail challenge →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-challenge-pertemuan-2)
+📎 [Detail challenge & bonus →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-challenge-pertemuan-2)
 
 ---
+class: text-sm leading-snug
+---
 
-# 🩺 Cheat Sheet Error Umum
+# 🩺 Cheat Sheet Error Umum (1/2)
 
-| Pesan error | Penyebab | Solusi |
-|---|---|---|
-| `BOTTOM OVERFLOWED` | Konten lebih tinggi dari ruang | Scroll view / `Flexible`/`Wrap` |
-| `unbounded height` | `ListView`/`GridView` di `Column`/scroll | `Expanded`, `shrinkWrap`, atau Sliver |
-| `non-zero flex ... unbounded` | `Expanded`/`Flexible` di scroll view | Hapus/beri tinggi tetap |
-| `expected RenderSliver` | Widget biasa di `slivers:` | Bungkus `SliverToBoxAdapter` |
-| Gambar tak muncul (Android) | Izin `INTERNET` belum ada | Tambahkan di manifest |
-| Gambar tak muncul (Chrome) | CORS | Pakai `picsum.photos/seed/...` |
-| Tertutup status bar/notch | Belum pakai `SafeArea` | Bungkus `SafeArea` |
+| Pesan error | Solusi |
+|---|---|
+| `BOTTOM OVERFLOWED` | Scroll view / `Flexible`/`Wrap` |
+| `unbounded height` | `Expanded`, `shrinkWrap`, atau Sliver |
+| `non-zero flex ... unbounded` | Hapus `Expanded` / beri tinggi tetap |
+| `expected RenderSliver` | Bungkus `SliverToBoxAdapter` |
+
+---
+class: text-sm leading-snug
+---
+
+# 🩺 Cheat Sheet Error Umum (2/2)
+
+| Masalah | Solusi |
+|---|---|
+| Gambar tak muncul (Android) | Tambahkan izin `INTERNET` di manifest |
+| Gambar tak muncul (Chrome) | Pakai `picsum.photos/seed/...` (CORS) |
+| Konten tertutup status bar/notch | Bungkus dengan `SafeArea` |
 
 📎 [Tabel lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-cheat-sheet-error-umum)
 
 ---
+class: text-sm leading-snug
+---
 
-# 💡 Rangkuman Praktikum
+# 💡 Rangkuman Praktikum (1/2)
 
 1. **Jangan hardcode ukuran** — andalkan constraints, `Expanded`/`Flexible`, `Wrap`, `clamp`
 2. `MediaQuery` untuk keputusan **layar**, `LayoutBuilder` untuk keputusan **komponen**
 3. Pakai `MediaQuery.sizeOf`, `paddingOf` — bukan `.of(context).size`
 4. **Satu sumber breakpoint** (`Breakpoints`), mengikuti Material 3 window size classes
-5. **Daftar panjang = `builder`**; `SingleChildScrollView` hanya untuk konten pendek
-
-<!--
-lanjutan poin 6–10 di slide berikutnya
--->
 
 ---
+class: text-sm leading-snug
+---
 
-# 💡 Rangkuman Praktikum (lanjutan)
+# 💡 Rangkuman Praktikum (2/2)
 
+5. **Daftar panjang = `builder`**; `SingleChildScrollView` hanya untuk konten pendek
 6. **Halaman campuran = `CustomScrollView` + Sliver**, bukan `ListView` di dalam `Column`
 7. **Satu widget, satu file** — pecah UI jadi komponen kecil, pakai `const`
 8. Selalu beri **`loading`/`error` state** untuk gambar/data dari jaringan
-9. **Uji ekstrem:** font terbesar, teks panjang, landscape, tablet, keyboard terbuka
-10. Package seperti `flutter_screenutil`/`responsive_framework` dibangun di atas dasar bawaan Flutter yang sudah kamu kuasai
 
-📎 [Bagian lengkap →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-rangkuman-praktikum)
+📎 [Bagian lengkap (poin 9–10) →](https://github.com/iffakhry/mobile-app-jti/blob/main/7-responsive-ui-scrollable-widget-v2.md#-rangkuman-praktikum)
 
 ---
+class: text-sm leading-snug
+---
 
-# 📚 Referensi
+# 📚 Referensi (1/2)
 
 - [Understanding constraints](https://docs.flutter.dev/ui/layout/constraints)
 - [Adaptive & responsive design](https://docs.flutter.dev/ui/adaptive-responsive)
 - [`SafeArea`](https://api.flutter.dev/flutter/widgets/SafeArea-class.html)
 - [`MediaQuery`](https://api.flutter.dev/flutter/widgets/MediaQuery-class.html)
 - [`LayoutBuilder`](https://api.flutter.dev/flutter/widgets/LayoutBuilder-class.html)
+
+---
+class: text-sm leading-snug
+---
+
+# 📚 Referensi (2/2)
+
 - [`SingleChildScrollView`](https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html)
 - [`ListView`](https://api.flutter.dev/flutter/widgets/ListView-class.html)
 - [`GridView`](https://api.flutter.dev/flutter/widgets/GridView-class.html)
