@@ -1,6 +1,7 @@
 {
-  "name": "gmobile-app-jti",
+  "name": "mobile-app-jti",
   "version": "1.0.0",
+  "private": true,
   "description": "Workshop Mobile App",
   "main": "index.js",
   "scripts": {

@@ -1,65 +1,63 @@
-import { readdir, rm, mkdir } from "node:fs/promises";
-import { join, basename, extname } from "node:path";
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
+import fs from "fs";
+import path from "path";
+import { execFileSync } from "child_process";
+import { fileURLToPath } from "url";
 
-const execFileAsync = promisify(execFile);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const slidesDir = "slides";
-const distDir = "dist";
-const basePath = "/mobile-app-jti/";
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+const SLIDES_DIR = path.join(PROJECT_ROOT, "slides");
+const DIST_DIR = path.join(PROJECT_ROOT, "dist");
 
-await rm(distDir, { recursive: true, force: true });
-await mkdir(distDir, { recursive: true });
+const BASE_PATH = "/mobile-app-jti/";
 
-const files = (await readdir(slidesDir))
-  .filter((file) => extname(file).toLowerCase() === ".md")
-  .sort();
+// Bersihkan output sebelumnya
+if (fs.existsSync(DIST_DIR)) {
+  fs.rmSync(DIST_DIR, { recursive: true, force: true });
+}
+
+fs.mkdirSync(DIST_DIR, { recursive: true });
+
+// Cari file slide
+const files = fs
+  .readdirSync(SLIDES_DIR)
+  .filter((file) => file.endsWith(".slides.md"));
 
 if (files.length === 0) {
-  console.log("Tidak ada file Markdown di folder slides/");
+  console.log("Tidak ada file .slides.md di folder slides/");
   process.exit(0);
 }
 
-console.log(`Ditemukan ${files.length} file slide:`);
+console.log(`Ditemukan ${files.length} slide:\n`);
 
 for (const file of files) {
-  const input = join(slidesDir, file);
+  const input = path.join(SLIDES_DIR, file);
 
-  let slug = basename(file, extname(file));
+  // Contoh:
+  // 7-responsive-ui-scrollable-widget-v2.slides.md
+  //
+  // menjadi:
+  // 7-responsive-ui-scrollable-widget-v2
+  const slug = file.replace(/\.slides\.md$/, "");
 
-  // Hapus suffix .slides dari nama file
-  if (slug.endsWith(".slides")) {
-    slug = slug.slice(0, -".slides".length);
-  }
+  const output = path.join(DIST_DIR, slug);
+  const base = `${BASE_PATH}${slug}/`;
 
-  slug = slug
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  console.log(`Building: ${file}`);
+  console.log(`Output : ${output}`);
+  console.log(`Base   : ${base}`);
 
-  const output = join(distDir, slug);
-
-  console.log(`\nBuilding: ${file}`);
-  console.log(`Output  : ${output}`);
-
-  await mkdir(output, { recursive: true });
-
-  await execFileAsync(
-    "npx",
-    [
-      "slidev",
-      "build",
-      input,
-      "--out",
-      output,
-      "--base",
-      `${basePath}${slug}/`,
-    ],
+  execFileSync(
+    path.join(PROJECT_ROOT, "node_modules", ".bin", "slidev"),
+    ["build", input, "--out", output, "--base", base],
     {
+      cwd: PROJECT_ROOT,
       stdio: "inherit",
     },
   );
+
+  console.log(`✓ ${slug} selesai\n`);
 }
 
-console.log("\nSemua slide berhasil dibuild.");
+console.log("Semua slide berhasil di-build.");
