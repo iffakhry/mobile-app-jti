@@ -67,36 +67,45 @@ Setelah modul ini, kamu mampu:
 
 ---
 
-## layout: two-cols
-
 # ⏱️ Peta Waktu
+
+<div class="grid grid-cols-2 gap-8 compact">
+<div>
 
 ### Pertemuan 1 (240 mnt)
 
-| Menit | Bagian                       |
-| ----- | ---------------------------- |
-| 20    | 0 · Persiapan project        |
-| 15    | 1 · Peta konsep              |
-| 50    | 2 · `TextField`              |
-| 45    | 3 · Button & `setState()`    |
-| 15    | ☕ Istirahat                 |
-| 60    | 4 · `Form` & `TextFormField` |
-| 35    | Challenge 1                  |
+| Menit | Bagian |
+|---|---|
+| 20 | 0 · Persiapan project |
+| 15 | 1 · Peta konsep |
+| 50 | 2 · `TextField` |
+| 45 | 3 · Button & `setState()` |
+| 15 | ☕ Istirahat |
+| 60 | 4 · `Form` & `TextFormField` |
+| 35 | Challenge 1 |
 
-::right::
-
-<div class="mt-16"></div>
+</div>
+<div>
 
 ### Pertemuan 2 (240 mnt)
 
-| Menit | Bagian                   |
-| ----- | ------------------------ |
-| 55    | 5 · Validasi input       |
-| 55    | 6 · UX standar industri  |
-| 15    | ☕ Istirahat             |
-| 40    | 7 · Kirim data ke profil |
-| 20    | 8 · Finalisasi & uji     |
-| 55    | Challenge akhir          |
+| Menit | Bagian |
+|---|---|
+| 55 | 5 · Validasi input |
+| 55 | 6 · UX standar industri |
+| 15 | ☕ Istirahat |
+| 40 | 7 · Kirim data ke profil |
+| 20 | 8 · Finalisasi & uji |
+| 55 | Challenge akhir |
+
+</div>
+</div>
+
+<style>
+.compact table { font-size: 0.8em; }
+.compact td, .compact th { padding-top: 0.2rem; padding-bottom: 0.2rem; }
+.compact h3 { margin-top: 0.4rem; margin-bottom: 0.4rem; }
+</style>
 
 ---
 
@@ -114,8 +123,8 @@ Setelah modul ini, kamu mampu:
 </div>
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Pertemuan 1
 
@@ -224,20 +233,20 @@ flowchart LR
 
 # Bagian 1 — Siapa Mengerjakan Apa?
 
-| Widget / Konsep         | Perannya                                            |
-| ----------------------- | --------------------------------------------------- |
-| `TextField`             | Kotak input teks dasar                              |
-| `TextEditingController` | Penampung isi teks (bisa dibaca & diubah)           |
-| `TextFormField`         | `TextField` + **validasi** + terhubung ke `Form`    |
-| `Form`                  | "Petugas loket": memvalidasi banyak field sekaligus |
-| `GlobalKey<FormState>`  | "Remote control" untuk `Form`                       |
-| Button                  | Pemicu aksi (mis. Simpan)                           |
-| `setState()`            | "Data berubah, gambar ulang!"                       |
-| `validator`             | Pemeriksa: `null` = valid, `String` = error         |
+| Widget / Konsep | Perannya |
+|---|---|
+| `TextField` | Kotak input teks dasar |
+| `TextEditingController` | Penampung isi teks (bisa dibaca & diubah) |
+| `TextFormField` | `TextField` + **validasi** + terhubung ke `Form` |
+| `Form` | "Petugas loket": memvalidasi banyak field sekaligus |
+| `GlobalKey<FormState>` | "Remote control" untuk `Form` |
+| Button | Pemicu aksi (mis. Simpan) |
+| `setState()` | "Data berubah, gambar ulang!" |
+| `validator` | Pemeriksa: `null` = valid, `String` = error |
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Bagian 2
 
@@ -270,46 +279,55 @@ TextField(
 
 ---
 
-## layout: two-cols
-
 # Properti Penting
+
+<div class="grid grid-cols-2 gap-8 compact">
+<div>
 
 ### `InputDecoration`
 
-| Properti                    | Fungsi             |
-| --------------------------- | ------------------ |
-| `labelText`                 | Judul field        |
-| `hintText`                  | Contoh isian       |
-| `prefixIcon` / `suffixIcon` | Ikon kiri / kanan  |
-| `border`                    | Gaya garis kotak   |
-| `errorText`                 | Pesan error manual |
+| Properti | Fungsi |
+|---|---|
+| `labelText` | Judul field |
+| `hintText` | Contoh isian |
+| `prefixIcon` / `suffixIcon` | Ikon kiri / kanan |
+| `border` | Gaya garis kotak |
+| `errorText` | Pesan error manual |
 
-::right::
-
-<div class="mt-16"></div>
+</div>
+<div>
 
 ### `keyboardType`
 
-| Nilai          | Untuk           |
-| -------------- | --------------- |
-| `text`         | Teks umum       |
+| Nilai | Untuk |
+|---|---|
+| `text` | Teks umum |
 | `emailAddress` | Email (ada `@`) |
-| `phone`        | Telepon         |
-| `number`       | Angka           |
-| `multiline`    | Teks panjang    |
+| `phone` | Telepon |
+| `number` | Angka |
+| `multiline` | Teks panjang |
+
+</div>
+</div>
+
+<style>
+.compact table { font-size: 0.8em; }
+.compact td, .compact th { padding-top: 0.2rem; padding-bottom: 0.2rem; }
+.compact h3 { margin-top: 0.4rem; margin-bottom: 0.4rem; }
+</style>
 
 ---
 
 # 2.2 – 2.3 Membaca Input & `dispose()`
 
-| Cara                       | Kapan dipakai                                          |
-| -------------------------- | ------------------------------------------------------ |
+| Cara | Kapan dipakai |
+|---|---|
 | `onChanged: (value) {...}` | Bereaksi **setiap kali** mengetik (pencarian, counter) |
-| `TextEditingController`    | Baca/ubah isi **kapan saja** (saat tombol Simpan)      |
+| `TextEditingController` | Baca/ubah isi **kapan saja** (saat tombol Simpan) |
 
 <div class="mt-6 p-4 rounded bg-red-100 text-red-900">
 
-⚠️ **Aturan emas:** setiap `TextEditingController` yang dibuat di `State` **wajib** dibuang di `dispose()` — kalau tidak, memori bocor (_memory leak_).
+⚠️ **Aturan emas:** setiap `TextEditingController` yang dibuat di `State` **wajib** dibuang di `dispose()` — kalau tidak, memori bocor (*memory leak*).
 
 </div>
 
@@ -368,7 +386,7 @@ floatingActionButton: FloatingActionButton.extended(
 ),
 ```
 
-📝 `Navigator.push` membuka halaman baru di atas halaman sekarang; tombol _Back_ otomatis melakukan `pop`. (Dibahas lengkap di modul berikutnya.)
+📝 `Navigator.push` membuka halaman baru di atas halaman sekarang; tombol *Back* otomatis melakukan `pop`. (Dibahas lengkap di modul berikutnya.)
 
 <div class="mt-3 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md#25-hubungkan-tombol-edit-profil" target="_blank">📖 Langkah lengkap ↗</a>
@@ -385,15 +403,15 @@ floatingActionButton: FloatingActionButton.extended(
 
 </div>
 
-| Gejala                             | Penyebab & solusi                     |
-| ---------------------------------- | ------------------------------------- |
-| `unbounded width`                  | `TextField` di `Row` tanpa `Expanded` |
-| Warning controller                 | Lupa `dispose()`                      |
-| Perubahan `initState` tak terlihat | Pakai **Hot Restart**                 |
+| Gejala | Penyebab & solusi |
+|---|---|
+| `unbounded width` | `TextField` di `Row` tanpa `Expanded` |
+| Warning controller | Lupa `dispose()` |
+| Perubahan `initState` tak terlihat | Pakai **Hot Restart** |
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Bagian 3
 
@@ -403,21 +421,23 @@ Button & `setState()`
 
 ---
 
-## layout: two-cols
-
 # 3.1 Jenis Tombol (Material 3)
 
-| Widget           | Kapan                   |
-| ---------------- | ----------------------- |
-| `FilledButton`   | Aksi **utama**          |
+<div class="grid grid-cols-2 gap-8 compact">
+<div>
+
+| Widget | Kapan |
+|---|---|
+| `FilledButton` | Aksi **utama** |
 | `ElevatedButton` | Aksi penting + bayangan |
-| `OutlinedButton` | Aksi **sekunder**       |
-| `TextButton`     | Aksi ringan             |
-| `IconButton`     | Aksi berupa ikon        |
+| `OutlinedButton` | Aksi **sekunder** |
+| `TextButton` | Aksi ringan |
+| `IconButton` | Aksi berupa ikon |
 
-::right::
+</div>
+<div>
 
-<div class="mt-16 p-4 rounded bg-yellow-100 text-yellow-900">
+<div class="p-4 rounded bg-yellow-100 text-yellow-900">
 
 💡 **Trik penting**
 
@@ -427,9 +447,18 @@ Inilah cara standar menonaktifkan tombol.
 
 </div>
 
-<div class="mt-4 text-sm">
+<div class="mt-3 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md#31-jenis-tombol-di-material-3" target="_blank">📖 Selengkapnya ↗</a>
 </div>
+
+</div>
+</div>
+
+<style>
+.compact table { font-size: 0.8em; }
+.compact td, .compact th { padding-top: 0.2rem; padding-bottom: 0.2rem; }
+.compact h3 { margin-top: 0.4rem; margin-bottom: 0.4rem; }
+</style>
 
 ---
 
@@ -443,10 +472,10 @@ setState(() {
 });                     // ② Flutter menjalankan build() ulang
 ```
 
-| ✅ Lakukan                                      | ❌ Hindari                                         |
-| ----------------------------------------------- | -------------------------------------------------- |
-| Ubah variabel _di dalam_ `setState`             | `setState` di dalam `build()` (loop tak berujung)  |
-| Panggil hanya saat tampilan perlu berubah       | `setState(() async {...})`                         |
+| ✅ Lakukan | ❌ Hindari |
+|---|---|
+| Ubah variabel *di dalam* `setState` | `setState` di dalam `build()` (loop tak berujung) |
+| Panggil hanya saat tampilan perlu berubah | `setState(() async {...})` |
 | Kerjaan async di luar, lalu `setState` hasilnya | `setState` setelah halaman ditutup (cek `mounted`) |
 
 <div class="mt-2 text-sm">
@@ -488,10 +517,8 @@ FilledButton.icon(
 </div>
 
 ---
-
 layout: center
 class: text-center
-
 ---
 
 # ☕ Istirahat 15 Menit
@@ -499,8 +526,8 @@ class: text-center
 Setelah ini: **`Form` & `TextFormField`**
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Bagian 4
 
@@ -514,11 +541,11 @@ Setelah ini: **`Form` & `TextFormField`**
 
 Dengan `TextField` biasa, 5 field = 5× `if` manual + 5× `errorText`. Rawan terlewat.
 
-|                        | `TextField`     | `TextFormField`                |
-| ---------------------- | --------------- | ------------------------------ |
-| Punya `validator`      | ❌              | ✅                             |
-| Divalidasi oleh `Form` | ❌              | ✅                             |
-| Cocok untuk            | Pencarian, chat | Formulir (daftar, edit profil) |
+| | `TextField` | `TextFormField` |
+|---|---|---|
+| Punya `validator` | ❌ | ✅ |
+| Divalidasi oleh `Form` | ❌ | ✅ |
+| Cocok untuk | Pencarian, chat | Formulir (daftar, edit profil) |
 
 <div class="mt-4 p-3 rounded bg-red-100 text-red-900">
 
@@ -552,7 +579,6 @@ _formKey.currentState!.validate();          // ④ periksa SEMUA sekaligus
 <div class="p-3 rounded bg-blue-100 text-blue-900">
 
 `validator` mengembalikan:
-
 - **`null`** → valid
 - **`String`** → error (jadi pesan)
 
@@ -573,11 +599,11 @@ Gunakan `return null;` untuk valid.
 
 # Method Penting `FormState`
 
-| Method       | Fungsi                                                        |
-| ------------ | ------------------------------------------------------------- |
-| `validate()` | Jalankan semua validator → `true` jika semua valid            |
-| `save()`     | Panggil `onSaved` semua field                                 |
-| `reset()`    | Kembalikan ke nilai awal (pakai controller → hasilnya kosong) |
+| Method | Fungsi |
+|---|---|
+| `validate()` | Jalankan semua validator → `true` jika semua valid |
+| `save()` | Panggil `onSaved` semua field |
+| `reset()` | Kembalikan ke nilai awal (pakai controller → hasilnya kosong) |
 
 <div class="mt-6 p-4 rounded bg-yellow-100 text-yellow-900">
 
@@ -614,28 +640,28 @@ validator: (value) {
 
 # ✅ Checkpoint 4 & ⚠️ Kesalahan Umum
 
-| Yang kamu lakukan          | Hasil                      |
-| -------------------------- | -------------------------- |
-| Simpan dengan form kosong  | Pesan merah di kedua field |
-| Nama `Al`                  | `Nama minimal 3 karakter`  |
+| Yang kamu lakukan | Hasil |
+|---|---|
+| Simpan dengan form kosong | Pesan merah di kedua field |
+| Nama `Al` | `Nama minimal 3 karakter` |
 | Email `fakhry` (tanpa `@`) | `Format email tidak valid` |
-| Semua benar                | SnackBar `Tersimpan: ...`  |
+| Semua benar | SnackBar `Tersimpan: ...` |
 
-| Gejala                                   | Penyebab                       |
-| ---------------------------------------- | ------------------------------ |
+| Gejala | Penyebab |
+|---|---|
 | `Null check operator` di `currentState!` | `key` belum dipasang ke `Form` |
-| Validasi tak jalan di satu field         | Masih `TextField`              |
-| Semua field merah                        | `validator` return `''`        |
+| Validasi tak jalan di satu field | Masih `TextField` |
+| Semua field merah | `validator` return `''` |
 
 ---
 
 # 🏆 Challenge Pertemuan 1
 
-| Level  | Tantangan                                                                                               |
-| ------ | ------------------------------------------------------------------------------------------------------- |
-| ⭐     | Tambah field **Jurusan** (wajib, min. 3 karakter)                                                       |
-| ⭐⭐   | Tombol **Simpan nonaktif** sampai nama (≥ 3 karakter) & email (ada `@`) terisi                          |
-| ⭐⭐⭐ | Halaman terpisah dengan **field password** + **indikator kekuatan** (Lemah / Sedang / Kuat) _real-time_ |
+| Level | Tantangan |
+|---|---|
+| ⭐ | Tambah field **Jurusan** (wajib, min. 3 karakter) |
+| ⭐⭐ | Tombol **Simpan nonaktif** sampai nama (≥ 3 karakter) & email (ada `@`) terisi |
+| ⭐⭐⭐ | Halaman terpisah dengan **field password** + **indikator kekuatan** (Lemah / Sedang / Kuat) *real-time* |
 
 <div class="mt-4 text-sm opacity-80">
 
@@ -648,8 +674,8 @@ validator: (value) {
 </div>
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Pertemuan 2
 
@@ -741,11 +767,11 @@ validator: Validators.phone,
 
 `autovalidateMode`
 
-| Mode                | Perilaku                          | Catatan                        |
-| ------------------- | --------------------------------- | ------------------------------ |
-| `disabled`          | Hanya saat `validate()` dipanggil | Default                        |
-| `always`            | Terus-menerus sejak form tampil   | ❌ Form merah sebelum disentuh |
-| `onUserInteraction` | Setelah field disentuh            | ✅ Nyaman                      |
+| Mode | Perilaku | Catatan |
+|---|---|---|
+| `disabled` | Hanya saat `validate()` dipanggil | Default |
+| `always` | Terus-menerus sejak form tampil | ❌ Form merah sebelum disentuh |
+| `onUserInteraction` | Setelah field disentuh | ✅ Nyaman |
 
 <div class="mt-4 p-4 rounded bg-yellow-100 text-yellow-900">
 
@@ -761,16 +787,16 @@ validator: Validators.phone,
 
 # 5.4 Praktik — 8 Langkah di `edit_profile_page.dart`
 
-| #   | Langkah                                         | Letak                                 |
-| --- | ----------------------------------------------- | ------------------------------------- |
-| ①   | `import '../utils/validators.dart';`            | Atas file                             |
-| ②   | Controller `_phoneController`, `_bioController` | Di bawah `_emailController`           |
-| ③   | `dispose()` kedua controller                    | Sebelum `super.dispose()`             |
-| ④   | `AutovalidateMode _autoValidate = ...disabled;` | Di bawah deklarasi controller         |
-| ⑤   | **Ganti** method `_submit`                      | Seluruh method                        |
-| ⑥   | `autovalidateMode: _autoValidate`               | Pada widget `Form`                    |
-| ⑦   | Ganti validator Nama & Email                    | Hapus blok lama                       |
-| ⑧   | Tambah field **No. HP** & **Bio**               | Setelah Email, sebelum `SizedBox(24)` |
+| # | Langkah | Letak |
+|---|---|---|
+| ① | `import '../utils/validators.dart';` | Atas file |
+| ② | Controller `_phoneController`, `_bioController` | Di bawah `_emailController` |
+| ③ | `dispose()` kedua controller | Sebelum `super.dispose()` |
+| ④ | `AutovalidateMode _autoValidate = ...disabled;` | Di bawah deklarasi controller |
+| ⑤ | **Ganti** method `_submit` | Seluruh method |
+| ⑥ | `autovalidateMode: _autoValidate` | Pada widget `Form` |
+| ⑦ | Ganti validator Nama & Email | Hapus blok lama |
+| ⑧ | Tambah field **No. HP** & **Bio** | Setelah Email, sebelum `SizedBox(24)` |
 
 <div class="mt-3 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md#54-praktik-validator--field-baru" target="_blank">📖 Kode & posisi lengkap tiap langkah ↗</a>
@@ -835,14 +861,14 @@ Validasi Flutter hanya untuk **kenyamanan pengguna**. Data bisa dikirim langsung
 
 # ✅ Checkpoint 5
 
-| Input                                | Hasil                      |
-| ------------------------------------ | -------------------------- |
-| Nama kosong                          | `Nama wajib diisi`         |
-| Email `fakhry@`                      | `Format email tidak valid` |
-| Email `fakhry@email.com`             | Valid                      |
-| HP `12345`                           | Pesan nomor HP tidak valid |
-| HP `081234567890` / `+6281234567890` | Valid                      |
-| Perbaiki isian yang salah            | Error hilang **sendiri**   |
+| Input | Hasil |
+|---|---|
+| Nama kosong | `Nama wajib diisi` |
+| Email `fakhry@` | `Format email tidak valid` |
+| Email `fakhry@email.com` | Valid |
+| HP `12345` | Pesan nomor HP tidak valid |
+| HP `081234567890` / `+6281234567890` | Valid |
+| Perbaiki isian yang salah | Error hilang **sendiri** |
 
 ---
 
@@ -850,13 +876,13 @@ Validasi Flutter hanya untuk **kenyamanan pengguna**. Data bisa dikirim langsung
 
 "Bisa jalan" ≠ "enak dipakai". Praktik tim profesional:
 
-| #   | Praktik                                    | Alasan                                         |
-| --- | ------------------------------------------ | ---------------------------------------------- |
-| 1   | Widget field **reusable** (`AppTextField`) | Satu perubahan desain, semua form ikut berubah |
-| 2   | `textInputAction` + `FocusNode`            | Tombol _Next_ memindahkan fokus                |
-| 3   | `keyboardType` tepat                       | Email dapat `@`, telepon dapat keypad          |
-| 4   | `inputFormatters`                          | Cegah input yang pasti salah                   |
-| 5   | `autofillHints`                            | HP bisa mengisi otomatis                       |
+| # | Praktik | Alasan |
+|---|---|---|
+| 1 | Widget field **reusable** (`AppTextField`) | Satu perubahan desain, semua form ikut berubah |
+| 2 | `textInputAction` + `FocusNode` | Tombol *Next* memindahkan fokus |
+| 3 | `keyboardType` tepat | Email dapat `@`, telepon dapat keypad |
+| 4 | `inputFormatters` | Cegah input yang pasti salah |
+| 5 | `autofillHints` | HP bisa mengisi otomatis |
 
 <div class="mt-3 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md#61-daftar-praktik" target="_blank">📖 Daftar lengkap ↗</a>
@@ -866,13 +892,13 @@ Validasi Flutter hanya untuk **kenyamanan pengguna**. Data bisa dikirim langsung
 
 # 6.1 Form yang Nyaman Dipakai (2/2)
 
-| #   | Praktik                                       | Alasan                                         |
-| --- | --------------------------------------------- | ---------------------------------------------- |
-| 6   | Form bisa di-scroll (`SingleChildScrollView`) | Cegah _BOTTOM OVERFLOWED_ saat keyboard muncul |
-| 7   | Tutup keyboard saat tap kosong / scroll       | Pengguna tidak "terkunci"                      |
-| 8   | **Loading state** & cegah double submit       | Data tak terkirim dua kali                     |
-| 9   | Cek **`mounted`** setelah `await`             | Halaman bisa sudah ditutup                     |
-| 10  | Jangan `debugPrint` data sensitif             | Password tak boleh masuk log                   |
+| # | Praktik | Alasan |
+|---|---|---|
+| 6 | Form bisa di-scroll (`SingleChildScrollView`) | Cegah *BOTTOM OVERFLOWED* saat keyboard muncul |
+| 7 | Tutup keyboard saat tap kosong / scroll | Pengguna tidak "terkunci" |
+| 8 | **Loading state** & cegah double submit | Data tak terkirim dua kali |
+| 9 | Cek **`mounted`** setelah `await` | Halaman bisa sudah ditutup |
+| 10 | Jangan `debugPrint` data sensitif | Password tak boleh masuk log |
 
 <div class="mt-4 p-3 rounded bg-yellow-100 text-yellow-900 text-sm">
 
@@ -911,7 +937,7 @@ class AppTextField extends StatefulWidget {
 
 ---
 
-# 6.3 Pindah Fokus dengan _Next_
+# 6.3 Pindah Fokus dengan *Next*
 
 ```dart
 final _emailFocus = FocusNode();
@@ -964,10 +990,8 @@ label: Text(_isLoading ? 'Menyimpan...' : 'Simpan Perubahan'),
 </div>
 
 ---
-
 layout: center
 class: text-center
-
 ---
 
 # ☕ Istirahat 15 Menit
@@ -1077,17 +1101,17 @@ Kode final sudah memakai: `AppTextField` · `Validators` · `FocusNode` · `Sing
 
 # 8.3 Skenario Uji
 
-| ✔   | Skenario                                      | Hasil yang diharapkan                            |
-| --- | --------------------------------------------- | ------------------------------------------------ |
-| ☐   | Buka Edit Profil                              | Form terisi data saat ini                        |
-| ☐   | Kosongkan nama / email `fakhry@` / HP `12345` | Pesan error sesuai                               |
-| ☐   | Ketik huruf di kolom HP                       | Huruf tidak bisa masuk                           |
-| ☐   | Perbaiki field yang error                     | Error hilang sendiri                             |
-| ☐   | Tekan _Next_ di keyboard                      | Fokus pindah                                     |
-| ☐   | Semua valid → Simpan (berkali-kali cepat)     | `Menyimpan...` 1 detik, hanya diproses sekali    |
-| ☐   | Setelah menyimpan                             | Kembali ke profil, data berubah, SnackBar muncul |
-| ☐   | Tekan Back tanpa menyimpan                    | Data tidak berubah                               |
-| ☐   | Keyboard muncul                               | Tanpa _overflow_, form bisa di-scroll            |
+| ✔ | Skenario | Hasil yang diharapkan |
+|---|---|---|
+| ☐ | Buka Edit Profil | Form terisi data saat ini |
+| ☐ | Kosongkan nama / email `fakhry@` / HP `12345` | Pesan error sesuai |
+| ☐ | Ketik huruf di kolom HP | Huruf tidak bisa masuk |
+| ☐ | Perbaiki field yang error | Error hilang sendiri |
+| ☐ | Tekan *Next* di keyboard | Fokus pindah |
+| ☐ | Semua valid → Simpan (berkali-kali cepat) | `Menyimpan...` 1 detik, hanya diproses sekali |
+| ☐ | Setelah menyimpan | Kembali ke profil, data berubah, SnackBar muncul |
+| ☐ | Tekan Back tanpa menyimpan | Data tidak berubah |
+| ☐ | Keyboard muncul | Tanpa *overflow*, form bisa di-scroll |
 
 <div class="mt-2 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md#83-skenario-uji" target="_blank">📖 Daftar skenario lengkap ↗</a>
@@ -1106,10 +1130,10 @@ Kode final sudah memakai: `AppTextField` · `Validators` · `FocusNode` · `Sing
 
 # 🏆 Challenge Akhir
 
-| Level  | Tantangan                                                                                                                                                                   |
-| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ⭐     | Field **Website / LinkedIn** (opsional). Jika diisi, harus URL valid (`http://` / `https://`)                                                                               |
-| ⭐⭐   | Halaman **Ganti Password**: lama, baru, konfirmasi. Min. 8 karakter, huruf **dan** angka, konfirmasi harus sama, tombol "mata"                                              |
+| Level | Tantangan |
+|---|---|
+| ⭐ | Field **Website / LinkedIn** (opsional). Jika diisi, harus URL valid (`http://` / `https://`) |
+| ⭐⭐ | Halaman **Ganti Password**: lama, baru, konfirmasi. Min. 8 karakter, huruf **dan** angka, konfirmasi harus sama, tombol "mata" |
 | ⭐⭐⭐ | **Pilih satu:** (A) **Tanggal Lahir** via `showDatePicker`, umur min. 17 tahun · (B) **Error dari server**: `admin@email.com` "sudah dipakai" → tampil di bawah field email |
 
 <div class="mt-3 text-sm opacity-80">
@@ -1127,43 +1151,41 @@ Kode final sudah memakai: `AppTextField` · `Validators` · `FocusNode` · `Sing
 
 # 📝 Rangkuman
 
-| Konsep                  | Ingat ini                                                                   |
-| ----------------------- | --------------------------------------------------------------------------- |
-| `TextField`             | Baca nilai dengan `controller` atau `onChanged`                             |
-| `TextEditingController` | Wajib `dispose()`                                                           |
-| Button                  | `onPressed: null` = nonaktif                                                |
-| `setState()`            | Gambar ulang; jangan di `build()`                                           |
-| `Form` + `GlobalKey`    | `validate()` untuk semua field                                              |
-| `TextFormField`         | `TextField` + `validator`                                                   |
-| `validator`             | `null` = valid, `String` = error (bukan `''`)                               |
-| `autovalidateMode`      | `onUserInteraction` setelah submit gagal                                    |
-| Praktik industri        | Reusable, validator terpisah, fokus, loading, `mounted`, validasi di server |
+| Konsep | Ingat ini |
+|---|---|
+| `TextField` | Baca nilai dengan `controller` atau `onChanged` |
+| `TextEditingController` | Wajib `dispose()` |
+| Button | `onPressed: null` = nonaktif |
+| `setState()` | Gambar ulang; jangan di `build()` |
+| `Form` + `GlobalKey` | `validate()` untuk semua field |
+| `TextFormField` | `TextField` + `validator` |
+| `validator` | `null` = valid, `String` = error (bukan `''`) |
+| `autovalidateMode` | `onUserInteraction` setelah submit gagal |
+| Praktik industri | Reusable, validator terpisah, fokus, loading, `mounted`, validasi di server |
 
 ---
 
 # ⚠️ Daftar Kesalahan Umum
 
-| Gejala                             | Kemungkinan penyebab                             |
-| ---------------------------------- | ------------------------------------------------ |
-| `unbounded width`                  | `TextField` di `Row` tanpa `Expanded`            |
-| `BOTTOM OVERFLOWED`                | Form tidak dibungkus `SingleChildScrollView`     |
-| `Null check operator ...`          | `GlobalKey` belum dipasang ke `Form`             |
-| Validasi tidak berjalan            | Pakai `TextField`, bukan `TextFormField`         |
-| Semua field merah                  | `validator` mengembalikan `''`                   |
-| Form tidak terisi data awal        | Controller diisi di `build()` / lupa Hot Restart |
-| Error `context` setelah `await`    | Lupa `if (!mounted) return;`                     |
-| Tampilan tak berubah saat mengetik | Lupa `setState`                                  |
+| Gejala | Kemungkinan penyebab |
+|---|---|
+| `unbounded width` | `TextField` di `Row` tanpa `Expanded` |
+| `BOTTOM OVERFLOWED` | Form tidak dibungkus `SingleChildScrollView` |
+| `Null check operator ...` | `GlobalKey` belum dipasang ke `Form` |
+| Validasi tidak berjalan | Pakai `TextField`, bukan `TextFormField` |
+| Semua field merah | `validator` mengembalikan `''` |
+| Form tidak terisi data awal | Controller diisi di `build()` / lupa Hot Restart |
+| Error `context` setelah `await` | Lupa `if (!mounted) return;` |
+| Tampilan tak berubah saat mengetik | Lupa `setState` |
 
 ---
-
 layout: end
 class: text-center
-
 ---
 
 # Terima Kasih 🚀
 
-**Happy Building**
+**Selanjutnya (Modul 7):** Navigasi antarhalaman — `Navigator`, named routes, kirim data antarhalaman
 
 <div class="mt-6 text-sm">
 <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/8-form-input-validasi.md" target="_blank">📖 Modul lengkap ↗</a>
