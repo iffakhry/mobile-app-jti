@@ -90,10 +90,12 @@ Kartu Profil Digital milikmu akan punya:
 </div>
 
 ---
+zoom: 0.8
+---
 
 # 🗓️ Rencana 2 × 4 Jam
 
-<div class="grid grid-cols-2 gap-6 text-sm">
+<div class="grid grid-cols-2 gap-6 text-xs">
 <div>
 
 ### Pertemuan 1
@@ -326,6 +328,8 @@ class _ProfilePageState extends State<ProfilePage> {
 class _StatItem extends StatelessWidget { /* label + value */ }
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#2-persiapan-kode-awal-starter" target="_blank">Kode awal lengkap (Persiapan)</a></div>
+
 <div class="mt-4 p-3 rounded bg-green-500/10 border border-green-500/30">
 
 ✅ **Checkpoint:** `flutter run` menampilkan foto, nama, statistik, tombol *Ikuti*, dan kartu *Tentang*. Tombol belum berfungsi.
@@ -515,6 +519,8 @@ void _onFollowPressed() {
 }
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#5-lab-3--snackbar-30-menit" target="_blank">Lab 3 — Snackbar</a></div>
+
 ---
 
 # Lab 3 — Checkpoint & Insight
@@ -561,6 +567,8 @@ InkWell(
   ]),
 ),
 ```
+
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#6-lab-4--ontap-pada-bio-25-menit" target="_blank">Lab 4 — onTap pada Bio</a></div>
 
 ---
 
@@ -729,6 +737,8 @@ Future<bool> _showConfirmDialog({
 }
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#10-lab-5--dialog-konfirmasi-berhenti-mengikuti-30-menit" target="_blank">Lab 5 — Dialog Konfirmasi</a></div>
+
 ---
 zoom: 0.9
 ---
@@ -758,6 +768,8 @@ Future<void> _onFollowPressed() async {
   _showSnack('Kamu berhenti mengikuti $_name');
 }
 ```
+
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#10-lab-5--dialog-konfirmasi-berhenti-mengikuti-30-menit" target="_blank">Lab 5 — Dialog Konfirmasi</a></div>
 
 ---
 
@@ -845,6 +857,8 @@ if (_openToWork) ...[
 ],
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#11-lab-6--switch-open-to-work-20-menit" target="_blank">Lab 6 — Switch</a></div>
+
 <div class="mt-2 p-3 rounded bg-green-500/10 border border-green-500/30">
 
 ✅ **Checkpoint:** geser Switch → lencana muncul / hilang.
@@ -875,6 +889,8 @@ for (final skill in _allSkills)
     },
   ),
 ```
+
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#12-lab-7--checkbox-keahlian-25-menit" target="_blank">Lab 7 — Checkbox</a></div>
 
 <v-clicks>
 
@@ -941,6 +957,8 @@ DropdownButton<ProfileStatus>(
   },
 ),
 ```
+
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#13-lab-8--dropdown-status-25-menit" target="_blank">Lab 8 — Dropdown</a></div>
 
 ---
 
@@ -1026,6 +1044,8 @@ class _SettingsCard extends StatelessWidget {
 }
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#14-lab-9--refactor-dan-reset-35-menit" target="_blank">Lab 9 — Refactor dan Reset</a></div>
+
 ---
 
 # Lab 9 — Pakai di Halaman & Reset
@@ -1058,6 +1078,8 @@ Future<void> _onResetPressed() async {
 }
 ```
 
+<div class="mt-3 text-xs opacity-80">📖 Versi lengkap & penjelasan di panduan: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#14-lab-9--refactor-dan-reset-35-menit" target="_blank">Lab 9 — Refactor dan Reset</a></div>
+
 ---
 
 # Lab 9 — Checkpoint & Insight
@@ -1076,6 +1098,8 @@ Future<void> _onResetPressed() async {
 - Jaga `setState()` seluas yang dibutuhkan saja. Memecah widget menjaga rebuild tetap kecil.
 
 </v-clicks>
+
+<div class="mt-4 text-sm opacity-90">📖 Kode lengkap proyek: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md#15-kode-lengkap-referensi-akhir" target="_blank">Kode Lengkap (Referensi Akhir)</a></div>
 
 ---
 
@@ -1216,6 +1240,6 @@ merespons sentuhan, meminta konfirmasi, dan menyimpan pilihan pengguna.
 
 <div class="mt-6 opacity-70 text-sm">
 
-Kode lengkap ada di file modul: `modul-07-interaksi-state-dasar.md`
+Panduan lengkap & kode akhir: <a href="https://github.com/iffakhry/mobile-app-jti/blob/main/9-interaksi-state-dasar.md" target="_blank">9-interaksi-state-dasar.md</a>
 
 </div>
