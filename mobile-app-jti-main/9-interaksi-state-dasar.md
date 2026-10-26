@@ -1480,3 +1480,5 @@ class _SettingsCard extends StatelessWidget {
 ---
 
 **Selamat! 🎉** Kartu Profil Digital milikmu sekarang sudah *hidup*: bisa merespons sentuhan, meminta konfirmasi, dan menyimpan pilihan pengguna. Di modul berikutnya, kamu akan belajar berpindah antarhalaman dan membawa data di antaranya.
+
+LILI KURNIA PUTRI
