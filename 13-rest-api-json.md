@@ -2066,6 +2066,8 @@ Tambahkan `import 'package:lapor_fasilitas/core/auth_interceptor.dart';` di bagi
 ### Langkah 4 — `pages/create_report_page.dart`
 
 ```dart
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lapor_fasilitas/core/api_exception.dart';
@@ -2297,7 +2299,7 @@ Karena navigasi utama baru dibuat di Lab 8, sementara tambahkan tombol di `Repor
       ),
 ```
 
-Lalu ubah `home` di `main.dart` menjadi `ReportListPage()` supaya kamu bisa menguji. Sebelumnya pastikan kamu sudah login (token tersimpan dari Lab 5).
+Tambahkan juga `import 'package:lapor_fasilitas/pages/create_report_page.dart';` di bagian atas `report_list_page.dart`. Lalu ubah `home` di `main.dart` menjadi `ReportListPage()` supaya kamu bisa menguji. Sebelumnya pastikan kamu sudah login (token tersimpan dari Lab 5).
 
 ### Langkah 6 — Uji
 
@@ -2690,8 +2692,8 @@ class _AuthGateState extends State<AuthGate> {
 
 ### Langkah 7 — Sambungkan semuanya
 
-1. `main.dart`: ubah `home` menjadi `const AuthGate()`.
-2. `login_page.dart`: ubah `_goToHome()` agar membuka `HomeShell()` (bukan `ProfilePage`).
+1. `main.dart`: ubah `home` menjadi `const AuthGate()` (tambahkan `import 'package:lapor_fasilitas/pages/auth_gate.dart';`).
+2. `login_page.dart`: ubah `_goToHome()` agar membuka `HomeShell()` (bukan `ProfilePage`), dan ganti `import` `profile_page.dart` menjadi `import 'package:lapor_fasilitas/pages/home_shell.dart';`.
 
 ```dart
   void _goToHome() {
