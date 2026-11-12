@@ -1218,7 +1218,7 @@ Keduanya sah dipakai. Karena aplikasi kita butuh interceptor untuk token dan upl
 | 3 | **Satu client** terkonfigurasi (base URL, timeout, header) | `ApiClient` |
 | 4 | **Error dipetakan** ke satu tipe, dengan pesan ramah pengguna | `ApiException` |
 | 5 | **Empat state UI**: loading, success, empty, error + retry | Lab 3 |
-| 6 | **Token otomatis** lewat interceptor, bukan ditempel manual tiap request | Lab 4 |
+| 6 | **Token ditempel otomatis lewat interceptor, hanya pada request yang ditandai** (opt-in), bukan manual di tiap request dan bukan ke semua request | Lab 4 |
 | 7 | **Token disimpan aman** (Keychain/Keystore), bukan di Shared Preferences | Lab 4 |
 | 8 | **Refresh token otomatis** saat access token kedaluwarsa | Lab 9 |
 | 9 | **Pagination** untuk daftar panjang | Lab 8 |
@@ -1281,11 +1281,20 @@ class TokenStorage {
 
 ### Langkah 3 — `core/auth_interceptor.dart`
 
-**Interceptor** adalah "penjaga gerbang": ia mencegat **setiap** request sebelum dikirim. Kita memakainya untuk menempelkan token otomatis, jadi kamu tidak perlu menulis header `Authorization` di tiap repository.
+**Interceptor** adalah "penjaga gerbang": ia mencegat request sebelum dikirim. Kita memakainya untuk menempelkan token secara otomatis, jadi kamu tidak perlu menulis header `Authorization` di setiap repository.
+
+Namun **tidak semua endpoint butuh token**. `register`, `login`, dan `GET /api/reports` bersifat publik. Karena itu kita memakai pendekatan **opt-in**: token **hanya** ditempel pada request yang **diberi penanda** `requiresAuth`. Request tanpa penanda dikirim tanpa token.
 
 ```dart
 import 'package:dio/dio.dart';
 import 'package:lapor_fasilitas/core/token_storage.dart';
+
+/// Kunci penanda di `extra` milik sebuah request.
+const requiresAuthKey = 'requiresAuth';
+
+/// Pasang pada request yang BUTUH login, contoh:
+///   _dio.get('/api/users/me', options: authRequired());
+Options authRequired() => Options(extra: {requiresAuthKey: true});
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor(this._tokenStorage);
@@ -1297,14 +1306,39 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await _tokenStorage.accessToken;
-    if (token != null) {
-      options.headers['Authorization'] = 'Bearer $token';
+    // Opt-in: tanpa penanda, request lewat tanpa token.
+    final requiresAuth = options.extra[requiresAuthKey] == true;
+
+    if (requiresAuth) {
+      final token = await _tokenStorage.accessToken;
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
     handler.next(options); // lanjutkan request
   }
 }
 ```
+
+Endpoint mana yang diberi penanda?
+
+| Endpoint | Pakai `authRequired()`? |
+|---|---|
+| `POST /api/auth/register` | Tidak |
+| `POST /api/auth/login` | Tidak |
+| `GET /api/reports` | Tidak (publik) |
+| `GET /api/users/me` | **Ya** |
+| `GET /api/reports/mine` | **Ya** |
+| `POST /api/reports` | **Ya** |
+| `POST /api/uploads/images` | **Ya** |
+
+> 💡 **Insight Industri — kenapa opt-in, bukan "tempel ke semua request"?**
+> Ini penerapan *prinsip hak akses minimum* (*least privilege*): token hanya dibawa ke tempat yang memang membutuhkannya.
+> - **Token tidak bocor.** Jika suatu saat `Dio` yang sama dipakai memanggil host lain (misalnya layanan pihak ketiga), token tidak ikut terkirim.
+> - **Endpoint publik tidak terpengaruh token.** Sebagian server menjawab `401` pada endpoint publik jika token yang dikirim sudah kedaluwarsa. Dengan opt-in, hal itu tidak akan terjadi.
+> - **Lupa menandai = error yang terlihat.** Jika kamu lupa memberi penanda pada endpoint yang butuh login, hasilnya `401 Token tidak ditemukan` yang langsung kelihatan saat diuji. Sebaliknya, pada pendekatan "tempel ke semua", kebocoran token tidak pernah kelihatan sama sekali.
+>
+> Ada juga tim yang memisahkan dua instance Dio (`publicDio` dan `authDio`). Hasilnya mirip; yang kita pakai di sini cukup satu Dio dengan penanda per request.
 
 ### Langkah 4 — Perbarui `core/api_client.dart`
 
@@ -1348,7 +1382,7 @@ class ApiClient {
 }
 ```
 
-> ✅ **Checkpoint 4:** proyek masih berjalan seperti di Sesi 1 (daftar laporan tetap tampil). Kamu bisa menjelaskan apa yang dilakukan `AuthInterceptor` dan mengapa lebih baik daripada menulis header `Authorization` di setiap repository.
+> ✅ **Checkpoint 4:** proyek masih berjalan seperti di Sesi 1 (daftar laporan tetap tampil, karena `GET /api/reports` publik dan tidak ditandai). Kamu bisa menjelaskan (a) apa yang dilakukan `AuthInterceptor`, (b) apa fungsi `authRequired()`, dan (c) mengapa pendekatan opt-in lebih aman daripada menempelkan token ke semua request.
 
 ---
 
@@ -1726,7 +1760,7 @@ Di `main.dart`, ubah `home: const ReportListPage()` menjadi `home: const LoginPa
 4. Login dengan benar → placeholder "Login berhasil".
 5. Lihat Debug Console: **tidak ada token** di header yang tercetak. Itu disengaja.
 
-> ⚠️ **Perhatian:** `401` pada endpoint login berarti *kredensial salah*, bukan *token kedaluwarsa*. Kita memperlakukan keduanya berbeda saat membuat refresh token di Lab 9.
+> ⚠️ **Perhatian:** `401` pada endpoint login berarti *kredensial salah*, bukan *token kedaluwarsa*. Karena request login **tidak ditandai** `authRequired()`, interceptor tidak akan memperlakukannya sebagai token kedaluwarsa saat kita membuat refresh token di Lab 9.
 
 > ✅ **Checkpoint 5:** register dan login berhasil, pesan error dari server tampil, dan tombol tidak bisa ditekan dua kali saat loading.
 
@@ -1737,10 +1771,13 @@ Di `main.dart`, ubah `home: const ReportListPage()` menjadi `home: const LoginPa
 ### Langkah 1 — Tambah method di `AuthRepository`
 
 ```dart
-  /// GET /api/users/me — butuh token (ditempel otomatis oleh AuthInterceptor)
+  /// GET /api/users/me — butuh token, jadi request DITANDAI authRequired()
   Future<User> getProfile() async {
     try {
-      final response = await _dio.get('/api/users/me');
+      final response = await _dio.get(
+        '/api/users/me',
+        options: authRequired(), // penanda: "request ini butuh token"
+      );
       return User.fromJson(response.data['data'] as Map<String, dynamic>);
     } catch (e) {
       throw ApiException.from(e);
@@ -1748,7 +1785,7 @@ Di `main.dart`, ubah `home: const ReportListPage()` menjadi `home: const LoginPa
   }
 ```
 
-Perhatikan: tidak ada kode token sama sekali di sini. Itulah hasil kerja interceptor.
+Perhatikan: tidak ada kode yang menulis token di sini. Kamu hanya memberi **penanda** `authRequired()`, dan interceptor yang menempelkan tokennya. Tambahkan `import 'package:lapor_fasilitas/core/auth_interceptor.dart';` di bagian atas `auth_repository.dart`.
 
 ### Langkah 2 — `pages/profile_page.dart`
 
@@ -1900,7 +1937,9 @@ Di `login_page.dart`, ganti isi `_goToHome()` agar membuka `ProfilePage` (tambah
 2. Tekan **Keluar** → kembali ke Login dan tidak bisa kembali dengan tombol *back*.
 3. Tutup aplikasi sepenuhnya lalu buka lagi. Kamu masih harus login karena kita belum memeriksa token saat startup (diperbaiki di Lab 8).
 
-> ✅ **Checkpoint 6:** halaman profil memuat data dari `GET /api/users/me` **tanpa** kamu menulis header token di kode repository.
+**Eksperimen (wajib dicoba):** hapus sementara baris `options: authRequired(),` pada `getProfile()`, lakukan *hot restart*, lalu buka halaman profil. Pesan apa yang muncul? Dari mana asalnya (aplikasi atau server)? Kembalikan barisnya setelah selesai. Inilah yang dimaksud "lupa menandai = error yang terlihat".
+
+> ✅ **Checkpoint 6:** halaman profil memuat data dari `GET /api/users/me` **tanpa** kamu menulis header token di kode repository, hanya dengan penanda `authRequired()`. Kamu bisa menjelaskan apa yang terjadi saat penanda itu dihapus.
 
 ---
 
@@ -1933,6 +1972,7 @@ import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lapor_fasilitas/core/api_client.dart';
 import 'package:lapor_fasilitas/core/api_exception.dart';
+import 'package:lapor_fasilitas/core/auth_interceptor.dart';
 
 class UploadRepository {
   UploadRepository({Dio? dio}) : _dio = dio ?? ApiClient.instance.dio;
@@ -1954,7 +1994,11 @@ class UploadRepository {
         ),
       });
 
-      final response = await _dio.post('/api/uploads/images', data: formData);
+      final response = await _dio.post(
+        '/api/uploads/images',
+        data: formData,
+        options: authRequired(), // butuh login
+      );
       return response.data['data']['url'] as String;
     } catch (e) {
       throw ApiException.from(e);
@@ -1985,6 +2029,8 @@ class UploadRepository {
 
 ### Langkah 3 — Tambah `createReport` di `ReportRepository`
 
+Tambahkan `import 'package:lapor_fasilitas/core/auth_interceptor.dart';` di bagian atas file. Perhatikan `options: authRequired()` pada kode di bawah: endpoint ini butuh login, jadi request-nya **ditandai**.
+
 ```dart
   /// POST /api/reports — butuh token
   Future<Report> createReport({
@@ -2006,6 +2052,7 @@ class UploadRepository {
             'description': description.trim(),
           if (imageUrl != null) 'image_url': imageUrl,
         },
+        options: authRequired(), // butuh login
       );
       return Report.fromJson(response.data['data'] as Map<String, dynamic>);
     } catch (e) {
@@ -2269,17 +2316,57 @@ Sekarang kita menyatukan semuanya. Kita membuat **satu widget daftar yang dipaka
 
 ### Langkah 1 — Tambah `getMyReports` di `ReportRepository`
 
+Endpoint `GET /api/reports/mine` bentuk response-nya **sama persis** dengan `/api/reports`, jadi helper `_fetchList` kita pakai ulang. Perbedaannya: endpoint ini **butuh login**, sehingga request-nya harus ditandai.
+
+Tambahkan `import 'package:lapor_fasilitas/core/auth_interceptor.dart';` di bagian atas file, lalu **ganti** `_fetchList` dengan versi yang punya parameter `requiresAuth`, dan tambahkan `getMyReports`:
+
 ```dart
   /// GET /api/reports/mine — hanya laporan milik user yang login
   Future<PagedResult<Report>> getMyReports({
     int page = 1,
     int limit = 10,
   }) {
-    return _fetchList('/api/reports/mine', page: page, limit: limit);
+    return _fetchList(
+      '/api/reports/mine',
+      page: page,
+      limit: limit,
+      requiresAuth: true, // endpoint ini butuh login
+    );
+  }
+
+  Future<PagedResult<Report>> _fetchList(
+    String path, {
+    required int page,
+    required int limit,
+    bool requiresAuth = false, // default: tanpa token (opt-in)
+    String? search,
+    ReportCondition? condition,
+    ReportStatus? status,
+  }) async {
+    try {
+      final response = await _dio.get(
+        path,
+        queryParameters: {
+          'page': page,
+          'limit': limit,
+          if (search != null && search.isNotEmpty) 'search': search,
+          if (condition != null) 'condition': condition.value,
+          if (status != null) 'status': status.value,
+        },
+        // Tandai hanya jika endpoint butuh login
+        options: requiresAuth ? authRequired() : null,
+      );
+      return PagedResult.fromJson(
+        response.data as Map<String, dynamic>,
+        Report.fromJson,
+      );
+    } catch (e) {
+      throw ApiException.from(e);
+    }
   }
 ```
 
-Bentuk response-nya **sama persis** dengan `/api/reports`, jadi helper `_fetchList` dipakai ulang. Perbedaannya hanya path dan kebutuhan token.
+`getReports` tidak perlu diubah: ia tidak memberi `requiresAuth`, jadi tetap dikirim tanpa token.
 
 ### Langkah 2 — `widgets/paginated_report_list.dart`
 
@@ -2648,10 +2735,18 @@ Request → 401 (token kedaluwarsa)
 
 ### Langkah 1 — Ganti isi `core/auth_interceptor.dart`
 
+Pendekatan opt-in memberi keuntungan di sini: **hanya request yang ditandai `authRequired()`** yang boleh memicu refresh. `401` pada login (tidak ditandai) otomatis diabaikan, jadi kita tidak perlu lagi mengecek awalan path `/api/auth/`.
+
 ```dart
 import 'package:dio/dio.dart';
 import 'package:lapor_fasilitas/core/app_config.dart';
 import 'package:lapor_fasilitas/core/token_storage.dart';
+
+/// Kunci penanda di `extra` milik sebuah request.
+const requiresAuthKey = 'requiresAuth';
+
+/// Pasang pada request yang BUTUH login.
+Options authRequired() => Options(extra: {requiresAuthKey: true});
 
 class AuthInterceptor extends Interceptor {
   AuthInterceptor(
@@ -2672,9 +2767,12 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await _tokenStorage.accessToken;
-    if (token != null) {
-      options.headers['Authorization'] = 'Bearer $token';
+    // Opt-in: token hanya ditempel pada request yang ditandai
+    if (options.extra[requiresAuthKey] == true) {
+      final token = await _tokenStorage.accessToken;
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
     handler.next(options);
   }
@@ -2686,11 +2784,12 @@ class AuthInterceptor extends Interceptor {
   ) async {
     final options = err.requestOptions;
     final isUnauthorized = err.response?.statusCode == 401;
-    // 401 pada login/register/refresh BUKAN token kedaluwarsa → jangan di-refresh
-    final isAuthEndpoint = options.path.startsWith('/api/auth/');
+    // Hanya request yang DITANDAI yang boleh memicu refresh. 401 pada login
+    // (tidak ditandai) berarti kredensial salah, bukan token kedaluwarsa.
+    final requiresAuth = options.extra[requiresAuthKey] == true;
     final alreadyRetried = options.extra['retried'] == true;
 
-    if (!isUnauthorized || isAuthEndpoint || alreadyRetried) {
+    if (!isUnauthorized || !requiresAuth || alreadyRetried) {
       return handler.next(err);
     }
 
@@ -2701,7 +2800,8 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    // Ulangi request yang tadi gagal, kali ini dengan token baru
+    // Ulangi request yang tadi gagal, kali ini dengan token baru.
+    // Penanda requiresAuth masih ada di `extra`, jadi tetap diperlakukan sama.
     options.extra['retried'] = true;
     options.headers['Authorization'] =
         'Bearer ${await _tokenStorage.accessToken}';
@@ -2728,7 +2828,8 @@ class AuthInterceptor extends Interceptor {
     if (refreshToken == null) return false;
 
     try {
-      // Pakai Dio terpisah (tanpa interceptor ini) agar tidak berputar-putar
+      // Pakai Dio terpisah (tanpa interceptor ini) agar tidak berputar-putar.
+      // Endpoint refresh memang tidak butuh Authorization.
       final response = await Dio(BaseOptions(baseUrl: AppConfig.baseUrl)).post(
         '/api/auth/refresh',
         data: {'refresh_token': refreshToken},
@@ -2856,7 +2957,7 @@ Profil tetap tampil seperti biasa. **Hapus tombol debug** setelah selesai.
 
 Uji juga kasus gagal: rusak-kan **kedua** token (ganti `refreshToken` dengan teks ngawur). Aplikasi harus menghapus token dan membawamu ke halaman login.
 
-> ✅ **Checkpoint 9:** access token yang kedaluwarsa tidak membuat pengguna terganggu. Kamu bisa menjelaskan mengapa refresh dijalankan lewat satu proses bersama, dan mengapa `401` pada `/api/auth/login` tidak boleh memicu refresh.
+> ✅ **Checkpoint 9:** access token yang kedaluwarsa tidak membuat pengguna terganggu. Kamu bisa menjelaskan mengapa refresh dijalankan lewat satu proses bersama, dan mengapa `401` pada request yang tidak ditandai `authRequired()` (seperti login) tidak boleh memicu refresh.
 
 ---
 
@@ -2876,6 +2977,23 @@ Tangani `403` (bukan pemilik) dan `404` (laporan sudah tidak ada) dengan pesan y
 
 **⭐⭐⭐ Bonus — Pencarian dengan debounce.** Tambahkan `TextField` pencarian di tab "Semua" yang memanggil `getReports(search: ...)`. Agar API tidak dipanggil setiap huruf diketik, tunda pemanggilan sekitar 500 ms setelah pengguna berhenti mengetik (`Timer` dari `dart:async`).
 
+**⭐⭐⭐ Menantang — Hindari refresh ganda.** Interceptor di Lab 9 sudah mencegah refresh ganda untuk request yang gagal **bersamaan**. Tetapi bayangkan skenario ini:
+
+1. Request A dan request B sama-sama dikirim dengan access token lama.
+2. Request A mendapat `401`, lalu refresh berjalan dan selesai, sehingga token baru tersimpan.
+3. Request B baru mendapat `401` **setelah** refresh itu selesai (jaringan lebih lambat).
+4. Interceptor menganggap B perlu refresh, padahal token sudah diperbarui oleh A. Akibatnya terjadi satu panggilan `/api/auth/refresh` yang tidak perlu, dan refresh token yang baru ikut terpakai.
+
+Perbaiki `onError` agar request B **tidak me-refresh lagi**, melainkan langsung mengulang request dengan token terbaru.
+
+*Petunjuk:*
+- Header `Authorization` pada `err.requestOptions.headers` menyimpan token yang **dipakai request yang gagal**.
+- Bandingkan dengan token yang **sekarang tersimpan** di `TokenStorage`.
+- Jika keduanya **berbeda**, berarti token sudah diperbarui oleh request lain, jadi lewati refresh dan langsung ulangi request.
+- Jika keduanya **sama**, barulah panggil `_refreshToken()`.
+
+*Cara menguji:* kirim dua request yang butuh login hampir bersamaan (misalnya muat tab "Semua" dan "Laporan Saya" setelah merusak access token seperti di Lab 9), lalu hitung berapa kali `POST /api/auth/refresh` muncul di Debug Console. Targetnya **satu kali**.
+
 ---
 
 ## Pemecahan Masalah (Troubleshooting)
@@ -2886,7 +3004,7 @@ Tangani `403` (bukan pemilik) dan `404` (laporan sudah tidak ada) dengan pesan y
 | Pesan "Tidak dapat terhubung ke server" | Tidak ada internet, atau salah ketik base URL | Buka base URL di browser; cek `AppConfig.baseUrl` |
 | Request pertama lama sekali | Server *serverless* baru "bangun" | Tunggu sebentar; timeout 15–20 detik sudah mengantisipasi |
 | Di Chrome muncul error XMLHttpRequest / CORS | Server membatasi origin, atau URL salah | Pastikan URL benar; jika URL benar, tanyakan ke pengajar karena itu pengaturan server |
-| `401 Token tidak ditemukan` | Header `Authorization` tidak terkirim | Pastikan `AuthInterceptor` terpasang di `ApiClient` dan login sudah menyimpan token |
+| `401 Token tidak ditemukan` | Header `Authorization` tidak terkirim: request lupa diberi `options: authRequired()`, `AuthInterceptor` belum terpasang di `ApiClient`, atau login belum menyimpan token | Cek ketiganya; yang paling sering adalah lupa `authRequired()` pada endpoint yang butuh login |
 | `401 Token tidak valid` / `Token sudah kedaluwarsa` | Token rusak atau habis masa berlaku | Login ulang; selesaikan Lab 9 agar otomatis |
 | `401 Email atau password salah` padahal benar | Data demo direset | Register ulang |
 | `400 Validasi gagal` | Isi body tidak sesuai aturan | Baca `errors` di response (lihat Debug Console) |
@@ -2910,7 +3028,7 @@ Tangani `403` (bukan pemilik) dan `404` (laporan sudah tidak ada) dengan pesan y
 2. **REST** memakai resource (URL kata benda), method (`GET`/`POST`/...), dan status code (2xx sukses, 4xx salah di client, 5xx salah di server).
 3. **JSON ↔ Dart:** `jsonDecode` → `Map` → `Model.fromJson`. Waspadai `null` (`String?`) dan perbedaan `snake_case` ↔ `camelCase`.
 4. **Standar industri:** arsitektur berlapis (UI → Repository → API Client → Model), satu client Dio terkonfigurasi, error dipetakan ke satu tipe, dan empat state UI (loading, success, empty, error).
-5. **Autentikasi:** `Authorization: Bearer <token>` ditempel otomatis lewat **interceptor**; token disimpan di **secure storage**; **refresh token** (sekali pakai) menjaga sesi tanpa mengganggu pengguna.
+5. **Autentikasi:** `Authorization: Bearer <token>` ditempel otomatis lewat **interceptor**, tetapi **hanya pada request yang ditandai** `authRequired()` (opt-in, prinsip hak akses minimum); token disimpan di **secure storage**; **refresh token** (sekali pakai) menjaga sesi tanpa mengganggu pengguna.
 6. **Upload file** memakai `multipart/form-data` (`FormData`); pastikan **nama field** dan **content type** benar, serta kompres gambar sebelum diunggah.
 7. **Pagination** dan **widget yang dipakai ulang** membuat aplikasi hemat data dan kodenya ringkas.
 
